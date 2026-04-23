@@ -1,0 +1,1509 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Minuto de Oro — Demo Würth</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Barlow:wght@400;500;600;700;800;900&family=Barlow+Condensed:wght@500;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{
+  --w-red:#CC0000;
+  --w-red-dark:#90112C;
+  --w-black:#000000;
+  --w-white:#FFFFFF;
+  --w-yellow:#FDC300;
+  --w-gray-25:#BFBFBF;
+  --w-gray-40:#999999;
+  --w-gray-55:#737373;
+  --w-gray-70:#4D4D4D;
+  --w-gray-85:#262626;
+  --w-green:#008448;
+  --w-blue:#004774;
+  --w-bg:#F5F5F5;
+  --w-bg-card:#FFFFFF;
+  --w-border:#E5E5E5;
+  --shadow-sm:0 1px 2px rgba(0,0,0,0.05);
+  --shadow-md:0 4px 12px rgba(0,0,0,0.08);
+  --shadow-lg:0 12px 32px rgba(0,0,0,0.12);
+}
+
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%}
+body{
+  font-family:'Barlow',sans-serif;
+  background:var(--w-bg);
+  color:var(--w-black);
+  font-size:14px;
+  line-height:1.4;
+  -webkit-font-smoothing:antialiased;
+}
+
+/* ============ HEADER ============ */
+.topbar{
+  background:var(--w-black);
+  color:var(--w-white);
+  padding:8px 24px;
+  font-size:11px;
+  font-family:'Barlow Condensed',sans-serif;
+  letter-spacing:1px;
+  text-transform:uppercase;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+}
+.topbar .breadcrumb{display:flex;gap:14px;align-items:center}
+.topbar .breadcrumb span{opacity:0.7}
+.topbar .breadcrumb strong{color:var(--w-yellow);font-weight:700;letter-spacing:1.5px}
+.topbar .sync-status{display:flex;align-items:center;gap:8px}
+.sync-dot{width:8px;height:8px;border-radius:50%;background:var(--w-green);box-shadow:0 0 8px var(--w-green);animation:pulse 2s infinite}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:0.4}}
+
+.header{
+  background:var(--w-red);
+  color:var(--w-white);
+  padding:14px 24px;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  border-bottom:3px solid var(--w-black);
+}
+.logo{
+  display:flex;align-items:center;gap:14px;
+}
+.logo-mark{
+  width:38px;height:38px;
+  background:var(--w-white);
+  display:flex;align-items:center;justify-content:center;
+  position:relative;
+}
+.logo-mark::before{
+  content:"";
+  position:absolute;
+  inset:8px;
+  background:var(--w-red);
+  clip-path:polygon(0 40%, 30% 40%, 30% 0, 70% 0, 70% 40%, 100% 40%, 100% 100%, 0 100%);
+}
+.logo-text{
+  font-family:'Barlow Condensed',sans-serif;
+  font-weight:800;
+  font-size:22px;
+  letter-spacing:2px;
+}
+.logo-sub{
+  font-size:10px;
+  letter-spacing:3px;
+  opacity:0.85;
+  text-transform:uppercase;
+  font-weight:500;
+}
+.header-right{display:flex;align-items:center;gap:20px;font-size:12px}
+.seller-pill{
+  background:rgba(0,0,0,0.25);
+  padding:6px 14px;
+  border:1px solid rgba(255,255,255,0.2);
+  font-family:'Barlow Condensed',sans-serif;
+  font-weight:600;
+  letter-spacing:1px;
+  text-transform:uppercase;
+}
+.seller-pill strong{color:var(--w-yellow)}
+
+/* ============ DEMO CONTROL BAR ============ */
+.demo-bar{
+  background:var(--w-black);
+  color:var(--w-white);
+  padding:10px 24px;
+  display:flex;
+  align-items:center;
+  gap:18px;
+  font-size:11px;
+  text-transform:uppercase;
+  letter-spacing:1.5px;
+  font-family:'Barlow Condensed',sans-serif;
+  font-weight:600;
+  border-bottom:1px solid var(--w-gray-70);
+}
+.demo-bar .stepper{display:flex;gap:4px;flex:1}
+.demo-bar .step{
+  padding:6px 14px;
+  background:var(--w-gray-85);
+  cursor:pointer;
+  border-left:3px solid transparent;
+  transition:all 0.2s;
+  display:flex;align-items:center;gap:8px;
+}
+.demo-bar .step:hover{background:var(--w-gray-70)}
+.demo-bar .step.active{
+  background:var(--w-red);
+  border-left-color:var(--w-yellow);
+}
+.demo-bar .step-num{
+  background:rgba(255,255,255,0.15);
+  width:18px;height:18px;
+  display:flex;align-items:center;justify-content:center;
+  border-radius:50%;
+  font-size:10px;
+}
+.demo-bar .step.active .step-num{background:var(--w-yellow);color:var(--w-black)}
+.demo-bar .demo-label{color:var(--w-yellow);margin-right:8px}
+
+/* ============ APP SHELL ============ */
+.app{
+  padding:20px 24px 80px;
+  max-width:1440px;
+  margin:0 auto;
+}
+
+/* ============ SCREEN: DASHBOARD ============ */
+.screen{display:none;animation:fadeIn 0.3s ease}
+.screen.active{display:block}
+@keyframes fadeIn{from{opacity:0;transform:translateY(4px)}to{opacity:1;transform:translateY(0)}}
+
+.section-title{
+  font-family:'Barlow Condensed',sans-serif;
+  font-weight:800;
+  font-size:13px;
+  text-transform:uppercase;
+  letter-spacing:2px;
+  color:var(--w-gray-55);
+  margin-bottom:12px;
+  padding-bottom:6px;
+  border-bottom:2px solid var(--w-black);
+  display:flex;align-items:center;justify-content:space-between;
+}
+.section-title .accent{color:var(--w-red)}
+
+/* Client card */
+.client-header{
+  background:var(--w-white);
+  border-left:4px solid var(--w-red);
+  padding:18px 22px;
+  display:grid;
+  grid-template-columns:1fr auto;
+  gap:20px;
+  align-items:center;
+  box-shadow:var(--shadow-sm);
+  margin-bottom:20px;
+}
+.client-info h1{
+  font-family:'Barlow Condensed',sans-serif;
+  font-size:26px;
+  font-weight:800;
+  letter-spacing:0.5px;
+  line-height:1.1;
+  margin-bottom:4px;
+}
+.client-meta{display:flex;gap:20px;flex-wrap:wrap;font-size:12px;color:var(--w-gray-55);margin-top:6px}
+.client-meta span strong{color:var(--w-black);font-weight:600;margin-left:3px}
+.badges{display:flex;gap:6px;margin-top:10px}
+.badge{
+  font-family:'Barlow Condensed',sans-serif;
+  font-size:10px;
+  letter-spacing:1.5px;
+  text-transform:uppercase;
+  padding:4px 10px;
+  font-weight:700;
+}
+.badge-active{background:var(--w-green);color:var(--w-white)}
+.badge-rubro{background:var(--w-black);color:var(--w-white)}
+.badge-division{background:var(--w-blue);color:var(--w-white)}
+
+.client-actions{display:flex;flex-direction:column;gap:8px;min-width:200px}
+.btn{
+  font-family:'Barlow Condensed',sans-serif;
+  font-weight:700;
+  letter-spacing:1.2px;
+  text-transform:uppercase;
+  padding:12px 20px;
+  border:none;
+  cursor:pointer;
+  font-size:13px;
+  display:flex;align-items:center;justify-content:center;gap:10px;
+  transition:all 0.15s;
+  position:relative;
+}
+.btn:hover{transform:translateY(-1px)}
+.btn-primary{background:var(--w-red);color:var(--w-white)}
+.btn-primary:hover{background:var(--w-red-dark)}
+.btn-dark{background:var(--w-black);color:var(--w-white)}
+.btn-ghost{background:transparent;color:var(--w-black);border:1.5px solid var(--w-black)}
+.btn-ghost:hover{background:var(--w-black);color:var(--w-white)}
+.btn-gold{
+  background:linear-gradient(135deg, var(--w-yellow), #e6a800);
+  color:var(--w-black);
+  box-shadow:0 0 0 2px var(--w-black);
+}
+.btn-gold .pulse-dot{
+  width:8px;height:8px;border-radius:50%;background:var(--w-red);animation:pulse 1.5s infinite;
+}
+.btn:disabled{background:var(--w-gray-25);color:var(--w-gray-55);cursor:not-allowed;transform:none}
+
+/* Quick stats */
+.stats-row{
+  display:grid;
+  grid-template-columns:repeat(4,1fr);
+  gap:12px;
+  margin-bottom:20px;
+}
+.stat{
+  background:var(--w-white);
+  padding:14px 16px;
+  border-top:3px solid var(--w-red);
+  display:flex;
+  flex-direction:column;
+  box-shadow:var(--shadow-sm);
+}
+.stat-label{
+  font-family:'Barlow Condensed',sans-serif;
+  font-size:10px;
+  text-transform:uppercase;
+  letter-spacing:2px;
+  color:var(--w-gray-55);
+}
+.stat-value{font-family:'Barlow Condensed',sans-serif;font-size:24px;font-weight:800;line-height:1;margin-top:4px}
+.stat-sub{font-size:11px;color:var(--w-gray-55);margin-top:2px}
+
+/* ============ MINUTO DE ORO SCREEN ============ */
+.minuto-intro{
+  background:linear-gradient(135deg, var(--w-black) 0%, #1a1a1a 100%);
+  color:var(--w-white);
+  padding:22px 28px;
+  display:grid;
+  grid-template-columns:auto 1fr auto;
+  gap:24px;
+  align-items:center;
+  margin-bottom:20px;
+  position:relative;
+  overflow:hidden;
+}
+.minuto-intro::before{
+  content:"";
+  position:absolute;
+  top:-30px;right:-30px;
+  width:180px;height:180px;
+  background:radial-gradient(circle, var(--w-yellow) 0%, transparent 70%);
+  opacity:0.15;
+}
+.minuto-icon{
+  width:56px;height:56px;
+  background:var(--w-yellow);
+  display:flex;align-items:center;justify-content:center;
+  font-size:28px;
+  box-shadow:0 4px 12px rgba(253,195,0,0.4);
+}
+.minuto-title{font-family:'Barlow Condensed',sans-serif;font-size:28px;font-weight:800;letter-spacing:1px;line-height:1}
+.minuto-subtitle{font-size:13px;opacity:0.8;margin-top:4px}
+.minuto-subtitle strong{color:var(--w-yellow)}
+
+.minimums-panel{display:flex;gap:10px}
+.min-chip{
+  background:rgba(255,255,255,0.08);
+  border:1px solid rgba(255,255,255,0.15);
+  padding:10px 14px;
+  min-width:90px;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  font-family:'Barlow Condensed',sans-serif;
+  position:relative;
+}
+.min-chip-label{font-size:9px;letter-spacing:1.5px;opacity:0.7;text-transform:uppercase}
+.min-chip-value{font-size:22px;font-weight:800;line-height:1;margin-top:4px}
+.min-chip-value .sep{color:var(--w-gray-55);margin:0 2px}
+.min-chip.complete{background:rgba(0,132,72,0.2);border-color:var(--w-green)}
+.min-chip.complete::after{
+  content:"✓";
+  position:absolute;
+  top:-6px;right:-6px;
+  background:var(--w-green);
+  color:var(--w-white);
+  width:18px;height:18px;
+  border-radius:50%;
+  display:flex;align-items:center;justify-content:center;
+  font-size:11px;
+  font-weight:700;
+}
+
+/* ============ MINUTO GRID ============ */
+.minuto-grid{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:16px;
+}
+.minuto-panel{
+  background:var(--w-white);
+  box-shadow:var(--shadow-sm);
+  display:flex;flex-direction:column;
+  min-height:360px;
+}
+.panel-head{
+  padding:12px 16px;
+  border-bottom:2px solid var(--w-black);
+  display:flex;align-items:center;justify-content:space-between;
+}
+.panel-head h3{
+  font-family:'Barlow Condensed',sans-serif;
+  font-weight:800;
+  font-size:15px;
+  letter-spacing:1.5px;
+  text-transform:uppercase;
+  display:flex;align-items:center;gap:10px;
+}
+.panel-head .tag{
+  font-size:10px;
+  letter-spacing:1.5px;
+  padding:3px 8px;
+  text-transform:uppercase;
+  font-weight:700;
+}
+.tag-reposicion{background:var(--w-blue);color:var(--w-white)}
+.tag-dinero{background:var(--w-yellow);color:var(--w-black)}
+.tag-lanza{background:var(--w-red);color:var(--w-white)}
+.tag-seleccion{background:var(--w-gray-85);color:var(--w-white)}
+
+.panel-desc{font-size:11px;color:var(--w-gray-55);padding:8px 16px;background:#fafafa;border-bottom:1px solid var(--w-border)}
+
+.product-list{flex:1;padding:8px 0;max-height:420px;overflow-y:auto}
+.product-list::-webkit-scrollbar{width:6px}
+.product-list::-webkit-scrollbar-thumb{background:var(--w-gray-25)}
+.product-list::-webkit-scrollbar-track{background:transparent}
+
+.product{
+  display:grid;
+  grid-template-columns:52px 1fr auto 36px;
+  gap:12px;
+  padding:10px 16px;
+  align-items:center;
+  border-bottom:1px solid var(--w-border);
+  cursor:pointer;
+  transition:background 0.15s;
+  position:relative;
+}
+.product:hover{background:#fafafa}
+.product.selected{background:rgba(253,195,0,0.08)}
+.product.selected::before{
+  content:"";
+  position:absolute;left:0;top:0;bottom:0;width:4px;
+  background:var(--w-yellow);
+}
+.product-img{
+  width:52px;height:52px;
+  background:#fafafa;
+  display:flex;align-items:center;justify-content:center;
+  border:1px solid var(--w-border);
+  overflow:hidden;
+  position:relative;
+}
+.product-img img{max-width:100%;max-height:100%;object-fit:contain}
+.product-img.placeholder{
+  font-family:'Barlow Condensed',sans-serif;
+  font-weight:700;
+  font-size:10px;
+  color:var(--w-gray-55);
+  letter-spacing:1px;
+  flex-direction:column;
+  gap:2px;
+  text-align:center;
+  padding:4px;
+}
+.product-img.placeholder .ico{font-size:20px;opacity:0.3}
+
+.product-info h4{
+  font-size:13px;
+  font-weight:600;
+  line-height:1.25;
+  margin-bottom:2px;
+}
+.product-code{
+  font-family:'Barlow Condensed',sans-serif;
+  font-size:10px;
+  color:var(--w-gray-55);
+  letter-spacing:1.5px;
+  font-weight:600;
+}
+.product-tags{display:flex;gap:4px;margin-top:3px;flex-wrap:wrap}
+.mini-tag{
+  font-family:'Barlow Condensed',sans-serif;
+  font-size:9px;
+  letter-spacing:1px;
+  padding:1px 6px;
+  text-transform:uppercase;
+  font-weight:700;
+}
+.mini-tag-promo{background:var(--w-red);color:var(--w-white)}
+.mini-tag-new{background:var(--w-yellow);color:var(--w-black)}
+.mini-tag-magnifico{background:var(--w-blue);color:var(--w-white)}
+.mini-tag-familia{background:#f0f0f0;color:var(--w-gray-70)}
+
+.product-price{
+  text-align:right;
+  font-family:'Barlow Condensed',sans-serif;
+}
+.price-main{font-size:14px;font-weight:800;color:var(--w-black)}
+.price-old{font-size:11px;color:var(--w-gray-40);text-decoration:line-through}
+.price-sub{font-size:9px;color:var(--w-gray-55);letter-spacing:1px;text-transform:uppercase}
+
+.product-toggle{
+  width:34px;height:34px;
+  border:1.5px solid var(--w-gray-25);
+  background:var(--w-white);
+  display:flex;align-items:center;justify-content:center;
+  cursor:pointer;
+  font-size:20px;
+  font-weight:300;
+  color:var(--w-gray-40);
+  transition:all 0.15s;
+}
+.product-toggle:hover{border-color:var(--w-black);color:var(--w-black)}
+.product.selected .product-toggle{
+  background:var(--w-green);
+  border-color:var(--w-green);
+  color:var(--w-white);
+}
+
+/* Reposición table style */
+.reposicion-grid{font-size:12px;padding:0}
+.reposicion-row{
+  display:grid;
+  grid-template-columns:52px 1fr repeat(6, 28px) 42px 42px 34px;
+  gap:6px;
+  padding:6px 14px;
+  align-items:center;
+  border-bottom:1px solid var(--w-border);
+  cursor:pointer;
+  font-size:11px;
+}
+.reposicion-row:hover{background:#fafafa}
+.reposicion-row.selected{background:rgba(253,195,0,0.08);border-left:4px solid var(--w-yellow)}
+.reposicion-head{
+  display:grid;
+  grid-template-columns:52px 1fr repeat(6, 28px) 42px 42px 34px;
+  gap:6px;
+  padding:8px 14px;
+  background:var(--w-gray-85);
+  color:var(--w-white);
+  font-family:'Barlow Condensed',sans-serif;
+  font-weight:600;
+  font-size:10px;
+  text-transform:uppercase;
+  letter-spacing:1px;
+  border-bottom:1px solid var(--w-border);
+  position:sticky;top:0;z-index:2;
+}
+.reposicion-head .num{text-align:center}
+.rep-month{text-align:center;font-weight:600;color:var(--w-gray-70)}
+.rep-month.has-data{background:var(--w-blue);color:var(--w-white)}
+.rep-media,.rep-sugestao{text-align:center;font-weight:700}
+.rep-media{background:#e8f4ff}
+.rep-sugestao{background:rgba(253,195,0,0.15);color:var(--w-red)}
+.rep-img{width:40px;height:40px;background:#fafafa;display:flex;align-items:center;justify-content:center;border:1px solid var(--w-border)}
+.rep-img img{max-width:100%;max-height:100%}
+.rep-name{font-size:11px;line-height:1.2}
+.rep-name strong{display:block;font-size:12px}
+
+/* Sticky footer action */
+.action-bar{
+  position:sticky;
+  bottom:0;
+  background:var(--w-white);
+  border-top:3px solid var(--w-black);
+  padding:16px 24px;
+  margin:24px -24px -24px;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  box-shadow:0 -4px 16px rgba(0,0,0,0.08);
+  z-index:10;
+}
+.action-info{display:flex;gap:24px;align-items:center}
+.action-metric{display:flex;flex-direction:column}
+.action-metric-label{font-family:'Barlow Condensed',sans-serif;font-size:10px;letter-spacing:1.5px;text-transform:uppercase;color:var(--w-gray-55)}
+.action-metric-value{font-family:'Barlow Condensed',sans-serif;font-size:22px;font-weight:800}
+.action-metric-value.ok{color:var(--w-green)}
+.action-metric-value.pending{color:var(--w-red)}
+.big-btn{font-size:15px;padding:16px 32px}
+
+/* ============ CART SCREEN ============ */
+.cart-shell{
+  display:grid;
+  grid-template-columns:1fr 380px;
+  gap:16px;
+}
+.cart-main{
+  background:var(--w-white);
+  box-shadow:var(--shadow-sm);
+}
+.cart-head{
+  padding:16px 20px;
+  border-bottom:2px solid var(--w-black);
+  display:flex;justify-content:space-between;align-items:center;
+}
+.cart-head h2{font-family:'Barlow Condensed',sans-serif;font-size:20px;font-weight:800;letter-spacing:1px;text-transform:uppercase}
+.cart-head-actions{display:flex;gap:8px}
+.btn-sm{padding:8px 14px;font-size:11px}
+
+.cart-item{
+  display:grid;
+  grid-template-columns:8px 64px 1fr auto auto auto;
+  gap:14px;
+  padding:14px 20px;
+  border-bottom:1px solid var(--w-border);
+  align-items:center;
+  position:relative;
+}
+.cart-item.minuto-oro .mo-bar{background:var(--w-yellow)}
+.mo-bar{width:8px;align-self:stretch;background:transparent}
+.cart-item-img{width:64px;height:64px;background:#fafafa;border:1px solid var(--w-border);display:flex;align-items:center;justify-content:center}
+.cart-item-img img{max-width:100%;max-height:100%}
+.cart-item-info h4{font-size:14px;font-weight:600;margin-bottom:3px}
+.cart-item-info .product-code{margin-bottom:3px}
+.qty-control{display:flex;align-items:center;border:1px solid var(--w-border)}
+.qty-btn{
+  width:30px;height:32px;
+  background:var(--w-white);
+  border:none;
+  cursor:pointer;
+  font-size:16px;
+  font-weight:600;
+}
+.qty-btn:hover{background:#f5f5f5}
+.qty-input{
+  width:44px;height:32px;
+  border:none;border-left:1px solid var(--w-border);border-right:1px solid var(--w-border);
+  text-align:center;font-weight:700;font-family:'Barlow Condensed',sans-serif;font-size:15px;
+}
+.qty-input:focus{outline:none;background:#fffbe6}
+.cart-item-total{font-family:'Barlow Condensed',sans-serif;font-size:16px;font-weight:800;min-width:100px;text-align:right}
+.remove-btn{
+  width:34px;height:34px;
+  background:transparent;border:1px solid var(--w-border);
+  cursor:pointer;
+  color:var(--w-gray-55);
+  display:flex;align-items:center;justify-content:center;
+  transition:all 0.15s;
+}
+.remove-btn:hover{background:var(--w-red);color:var(--w-white);border-color:var(--w-red)}
+
+/* Sidebar */
+.cart-side{display:flex;flex-direction:column;gap:16px}
+.side-block{background:var(--w-white);box-shadow:var(--shadow-sm)}
+.side-block-head{
+  padding:12px 16px;
+  background:var(--w-black);color:var(--w-white);
+  font-family:'Barlow Condensed',sans-serif;
+  font-weight:700;letter-spacing:1.5px;text-transform:uppercase;font-size:12px;
+}
+.side-block-body{padding:14px 16px}
+
+.indicators{display:grid;grid-template-columns:1fr;gap:10px}
+.indicator{
+  display:grid;
+  grid-template-columns:auto 1fr auto;
+  gap:10px;
+  align-items:center;
+  padding:10px;
+  background:#fafafa;
+  border-left:4px solid var(--w-green);
+}
+.indicator.warning{border-left-color:var(--w-yellow)}
+.indicator.danger{border-left-color:var(--w-red)}
+.indicator-dot{
+  width:12px;height:12px;border-radius:50%;
+  background:var(--w-green);
+}
+.indicator.warning .indicator-dot{background:var(--w-yellow)}
+.indicator.danger .indicator-dot{background:var(--w-red)}
+.indicator-label{font-size:11px;color:var(--w-gray-55);text-transform:uppercase;font-family:'Barlow Condensed',sans-serif;letter-spacing:1px}
+.indicator-label strong{display:block;color:var(--w-black);font-size:13px;font-weight:700}
+.indicator-value{font-family:'Barlow Condensed',sans-serif;font-size:24px;font-weight:800;line-height:1}
+
+.totals{font-family:'Barlow Condensed',sans-serif}
+.totals-row{display:flex;justify-content:space-between;padding:6px 0;font-size:13px;border-bottom:1px dashed var(--w-border)}
+.totals-row.grand{border:none;border-top:2px solid var(--w-black);margin-top:6px;padding-top:12px;font-size:20px;font-weight:800}
+.totals-row span:last-child{font-weight:700}
+
+/* ============ MODAL ============ */
+.modal-backdrop{
+  position:fixed;inset:0;
+  background:rgba(0,0,0,0.6);
+  display:none;
+  align-items:center;justify-content:center;
+  z-index:100;
+  padding:24px;
+  animation:fadeIn 0.2s;
+}
+.modal-backdrop.open{display:flex}
+.modal{
+  background:var(--w-white);
+  max-width:520px;
+  width:100%;
+  box-shadow:var(--shadow-lg);
+  overflow:hidden;
+  border-top:4px solid var(--w-red);
+}
+.modal-head{padding:18px 22px;border-bottom:1px solid var(--w-border)}
+.modal-head h3{font-family:'Barlow Condensed',sans-serif;font-size:20px;font-weight:800;letter-spacing:1px;text-transform:uppercase}
+.modal-head p{font-size:12px;color:var(--w-gray-55);margin-top:4px}
+.modal-body{padding:18px 22px}
+.motivos{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:14px}
+.motivo-btn{
+  padding:14px;
+  background:#fafafa;
+  border:2px solid var(--w-border);
+  cursor:pointer;
+  font-family:'Barlow Condensed',sans-serif;
+  font-weight:700;letter-spacing:1px;text-transform:uppercase;font-size:13px;
+  transition:all 0.15s;
+  text-align:left;
+}
+.motivo-btn:hover{border-color:var(--w-black);background:var(--w-white)}
+.motivo-btn.selected{background:var(--w-black);color:var(--w-white);border-color:var(--w-black)}
+.motivo-otro-area textarea{
+  width:100%;
+  padding:10px;
+  border:1.5px solid var(--w-border);
+  font-family:'Barlow',sans-serif;
+  font-size:13px;
+  resize:vertical;
+  min-height:60px;
+}
+.motivo-otro-area textarea:focus{outline:none;border-color:var(--w-red)}
+.modal-foot{padding:14px 22px;border-top:1px solid var(--w-border);display:flex;justify-content:flex-end;gap:8px;background:#fafafa}
+
+/* ============ TOAST ============ */
+.toast-host{
+  position:fixed;
+  bottom:24px;left:50%;transform:translateX(-50%);
+  display:flex;flex-direction:column;gap:8px;
+  z-index:200;
+  pointer-events:none;
+}
+.toast{
+  background:var(--w-black);color:var(--w-white);
+  padding:12px 20px;
+  font-family:'Barlow Condensed',sans-serif;
+  font-weight:600;letter-spacing:1px;text-transform:uppercase;font-size:13px;
+  box-shadow:var(--shadow-lg);
+  border-left:4px solid var(--w-yellow);
+  animation:toastIn 0.2s;
+}
+.toast.success{border-left-color:var(--w-green)}
+.toast.error{border-left-color:var(--w-red)}
+@keyframes toastIn{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
+
+/* ============ SUCCESS SCREEN ============ */
+.success-container{
+  background:var(--w-white);
+  padding:60px 40px;
+  text-align:center;
+  box-shadow:var(--shadow-md);
+  max-width:640px;
+  margin:40px auto;
+  position:relative;
+  border-top:6px solid var(--w-green);
+}
+.success-icon{
+  width:84px;height:84px;
+  background:var(--w-green);color:var(--w-white);
+  display:flex;align-items:center;justify-content:center;
+  font-size:42px;font-weight:300;
+  border-radius:50%;
+  margin:0 auto 20px;
+}
+.success-container h1{font-family:'Barlow Condensed',sans-serif;font-size:36px;font-weight:800;letter-spacing:1px;text-transform:uppercase}
+.success-container p{color:var(--w-gray-55);margin-top:8px;font-size:14px}
+.success-summary{
+  display:grid;grid-template-columns:repeat(3,1fr);gap:12px;
+  margin:28px 0;
+  padding:20px;
+  background:#fafafa;
+}
+.success-stat{text-align:center}
+.success-stat .v{font-family:'Barlow Condensed',sans-serif;font-size:32px;font-weight:800;color:var(--w-red)}
+.success-stat .l{font-family:'Barlow Condensed',sans-serif;font-size:10px;letter-spacing:1.5px;text-transform:uppercase;color:var(--w-gray-55)}
+
+/* Info note block */
+.info-bar{
+  background:#fff8dc;
+  border-left:4px solid var(--w-yellow);
+  padding:12px 16px;
+  margin-bottom:16px;
+  font-size:12px;
+  display:flex;gap:12px;align-items:flex-start;
+}
+.info-bar .info-icon{font-weight:800;color:var(--w-red);font-size:16px;line-height:1}
+.info-bar strong{display:block;margin-bottom:2px;font-family:'Barlow Condensed',sans-serif;letter-spacing:1px;text-transform:uppercase;font-size:11px}
+
+/* Mobile responsive */
+@media (max-width:1024px){
+  .minuto-grid{grid-template-columns:1fr}
+  .cart-shell{grid-template-columns:1fr}
+  .stats-row{grid-template-columns:repeat(2,1fr)}
+  .client-header{grid-template-columns:1fr}
+  .demo-bar{flex-direction:column;align-items:stretch}
+  .demo-bar .stepper{overflow-x:auto}
+}
+
+/* Footer */
+.foot{
+  text-align:center;
+  padding:24px;
+  font-family:'Barlow Condensed',sans-serif;
+  font-size:11px;
+  color:var(--w-gray-55);
+  letter-spacing:2px;
+  text-transform:uppercase;
+}
+.foot strong{color:var(--w-red)}
+</style>
+</head>
+<body>
+
+<!-- TOP BAR -->
+<div class="topbar">
+  <div class="breadcrumb">
+    <span>CONNECT WÜRTH</span>
+    <span>›</span>
+    <strong>MINUTO DE ORO · DEMO</strong>
+  </div>
+  <div class="sync-status">
+    <div class="sync-dot"></div>
+    <span>SINCRONIZADO · ÚLTIMA ACTUALIZACIÓN 07:28</span>
+  </div>
+</div>
+
+<!-- HEADER -->
+<header class="header">
+  <div class="logo">
+    <div class="logo-mark"></div>
+    <div>
+      <div class="logo-text">WÜRTH</div>
+      <div class="logo-sub">ARGENTINA · CONNECT</div>
+    </div>
+  </div>
+  <div class="header-right">
+    <div class="seller-pill">VENDEDOR · <strong id="sellerName">ZERBATTO J.</strong></div>
+    <div style="font-family:'Barlow Condensed',sans-serif;letter-spacing:1px">DIVISIÓN AUTO · CB 2</div>
+  </div>
+</header>
+
+<!-- DEMO NAV -->
+<div class="demo-bar">
+  <span class="demo-label">DEMO ›</span>
+  <div class="stepper">
+    <div class="step active" data-screen="dashboard" onclick="goTo('dashboard')"><span class="step-num">1</span> Dashboard Cliente</div>
+    <div class="step" data-screen="minuto" onclick="goTo('minuto')"><span class="step-num">2</span> Minuto de Oro</div>
+    <div class="step" data-screen="cart" onclick="goTo('cart')"><span class="step-num">3</span> Carrito / Visita</div>
+    <div class="step" data-screen="success" onclick="goTo('success')"><span class="step-num">4</span> Cierre</div>
+  </div>
+</div>
+
+<!-- APP -->
+<div class="app">
+
+  <!-- SCREEN 1: DASHBOARD -->
+  <section class="screen active" id="dashboard">
+
+    <div class="info-bar">
+      <div class="info-icon">!</div>
+      <div>
+        <strong>PROCESO COMERCIAL DINERO NUEVO</strong>
+        Antes de iniciar la visita, el vendedor prepara su estrategia en Minuto de Oro. Objetivo: pasar de 6,4 a 8 líneas promedio por pedido vendiendo al cliente productos que hoy le compra a la competencia.
+      </div>
+    </div>
+
+    <div class="client-header">
+      <div class="client-info">
+        <h1>MECÁNICA INTEGRAL CAÑUELAS S.A.</h1>
+        <div class="client-meta">
+          <span>Nº CLIENTE <strong>1204174</strong></span>
+          <span>CUIT <strong>30-71234567-9</strong></span>
+          <span>DIRECCIÓN <strong>Ruta 3 Km 62, Cañuelas</strong></span>
+          <span>ÚLT. COMPRA <strong>18/03/2026</strong></span>
+        </div>
+        <div class="badges">
+          <span class="badge badge-active">ACTIVO</span>
+          <span class="badge badge-rubro">MECÁNICA INTEGRAL</span>
+          <span class="badge badge-division">AUTO</span>
+        </div>
+      </div>
+      <div class="client-actions">
+        <button class="btn btn-gold" onclick="goTo('minuto')">
+          <span class="pulse-dot"></span> Minuto de Oro
+        </button>
+        <button class="btn btn-ghost btn-sm">Ficha Cliente</button>
+        <button class="btn btn-ghost btn-sm">Historial de Pedidos</button>
+      </div>
+    </div>
+
+    <div class="stats-row">
+      <div class="stat">
+        <div class="stat-label">Meses Activo</div>
+        <div class="stat-value">48</div>
+        <div class="stat-sub">Alta: Abril 2022</div>
+      </div>
+      <div class="stat">
+        <div class="stat-label">Líneas últ. pedido</div>
+        <div class="stat-value">7</div>
+        <div class="stat-sub">Promedio 12M: 6,4</div>
+      </div>
+      <div class="stat">
+        <div class="stat-label">Ítems diferentes 12M</div>
+        <div class="stat-value">23</div>
+        <div class="stat-sub">División AUTO</div>
+      </div>
+      <div class="stat">
+        <div class="stat-label">Crédito disponible</div>
+        <div class="stat-value">$ 3.2M</div>
+        <div class="stat-sub">Atraso medio: 0,3 días</div>
+      </div>
+    </div>
+
+    <div class="section-title">
+      ACCIONES DISPONIBLES <span class="accent">›</span>
+    </div>
+    <div class="stats-row" style="grid-template-columns:repeat(5,1fr)">
+      <div class="stat" style="border-top-color:var(--w-yellow);cursor:pointer" onclick="goTo('minuto')">
+        <div class="stat-label">⭐ Recomendado</div>
+        <div class="stat-value" style="font-size:16px">Minuto de Oro</div>
+        <div class="stat-sub">Preparar visita</div>
+      </div>
+      <div class="stat" style="cursor:pointer">
+        <div class="stat-label">Nuevo Pedido</div>
+        <div class="stat-value" style="font-size:16px">Directo</div>
+        <div class="stat-sub">Sin preparación</div>
+      </div>
+      <div class="stat" style="cursor:pointer">
+        <div class="stat-label">Recibo</div>
+        <div class="stat-value" style="font-size:16px">Cobranza</div>
+        <div class="stat-sub">Registrar pago</div>
+      </div>
+      <div class="stat" style="cursor:pointer">
+        <div class="stat-label">Cotización</div>
+        <div class="stat-value" style="font-size:16px">Presupuesto</div>
+        <div class="stat-sub">Enviar PDF</div>
+      </div>
+      <div class="stat" style="cursor:pointer">
+        <div class="stat-label">Cerrar Visita</div>
+        <div class="stat-value" style="font-size:16px">Finalizar</div>
+        <div class="stat-sub">Sin venta</div>
+      </div>
+    </div>
+
+  </section>
+
+  <!-- SCREEN 2: MINUTO DE ORO -->
+  <section class="screen" id="minuto">
+
+    <div class="minuto-intro">
+      <div class="minuto-icon">⭐</div>
+      <div>
+        <div class="minuto-title">MINUTO DE ORO · MECÁNICA INTEGRAL CAÑUELAS S.A.</div>
+        <div class="minuto-subtitle">Preparación de visita · <strong>Seleccioná productos para generar dinero nuevo</strong> · Cliente activo · Últimos 12 meses</div>
+      </div>
+      <div class="minimums-panel">
+        <div class="min-chip" id="chip-reposicion">
+          <div class="min-chip-label">Reposición</div>
+          <div class="min-chip-value"><span id="count-reposicion">0</span><span class="sep">/</span>4</div>
+        </div>
+        <div class="min-chip" id="chip-dinero">
+          <div class="min-chip-label">Dinero Nuevo</div>
+          <div class="min-chip-value"><span id="count-dinero">0</span><span class="sep">/</span>3</div>
+        </div>
+        <div class="min-chip" id="chip-lanza">
+          <div class="min-chip-label">Lanza/Promo</div>
+          <div class="min-chip-value"><span id="count-lanza">0</span><span class="sep">/</span>3</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="info-bar">
+      <div class="info-icon">i</div>
+      <div>
+        <strong>CÓMO FUNCIONA</strong>
+        Marcá como mínimo 4 productos de Reposición, 3 de Dinero Nuevo y 3 de Lanzamientos/Promociones. El botón "Iniciar Visita" se habilita automáticamente al cumplir los tres mínimos.
+      </div>
+    </div>
+
+    <div class="minuto-grid">
+
+      <!-- REPOSICIÓN -->
+      <div class="minuto-panel" style="grid-column:1 / -1">
+        <div class="panel-head">
+          <h3><span class="tag tag-reposicion">REPOSICIÓN</span> Lo que el cliente ya compra · Mín. 4</h3>
+          <span style="font-size:11px;color:var(--w-gray-55);font-family:'Barlow Condensed',sans-serif;letter-spacing:1px">COMPRAS ÚLTIMOS 12 MESES · ENE·26 → ABR·26 visible</span>
+        </div>
+        <div class="panel-desc">Historial real del cliente con media mensual y cantidad sugerida para los próximos 12 meses.</div>
+        <div class="product-list reposicion-grid" id="list-reposicion" style="max-height:none"></div>
+      </div>
+
+      <!-- DINERO NUEVO -->
+      <div class="minuto-panel">
+        <div class="panel-head">
+          <h3><span class="tag tag-dinero">DINERO NUEVO</span> Nunca compró · Mín. 3</h3>
+        </div>
+        <div class="panel-desc">Magníficos de la división AUTO e imprescindibles del rubro Mecánica Integral que el cliente nunca compró.</div>
+        <div class="product-list" id="list-dinero"></div>
+      </div>
+
+      <!-- LANZAMIENTOS / PROMO -->
+      <div class="minuto-panel">
+        <div class="panel-head">
+          <h3><span class="tag tag-lanza">LANZAMIENTOS Y PROMOCIONES</span> Mín. 3</h3>
+        </div>
+        <div class="panel-desc">Promociones vigentes del mes + productos lanzados en los últimos 6 meses para el rubro Mecánica Integral.</div>
+        <div class="product-list" id="list-lanza"></div>
+      </div>
+
+    </div>
+
+    <div class="action-bar">
+      <div class="action-info">
+        <div class="action-metric">
+          <div class="action-metric-label">Total seleccionados</div>
+          <div class="action-metric-value" id="total-selected">0</div>
+        </div>
+        <div class="action-metric">
+          <div class="action-metric-label">Mínimos cumplidos</div>
+          <div class="action-metric-value pending" id="min-cumplido">0 de 3</div>
+        </div>
+        <div class="action-metric">
+          <div class="action-metric-label">Subtotal estimado</div>
+          <div class="action-metric-value" id="estimated-total">$ 0</div>
+        </div>
+      </div>
+      <div style="display:flex;gap:10px">
+        <button class="btn btn-ghost" onclick="goTo('dashboard')">Volver</button>
+        <button class="btn btn-primary big-btn" id="btn-start-visit" disabled onclick="startVisit()">INICIAR VISITA →</button>
+      </div>
+    </div>
+
+  </section>
+
+  <!-- SCREEN 3: CARRITO -->
+  <section class="screen" id="cart">
+
+    <div class="info-bar">
+      <div class="info-icon">★</div>
+      <div>
+        <strong>VISITA EN CURSO · MINUTO DE ORO APLICADO</strong>
+        Los productos con <span style="background:var(--w-yellow);padding:0 4px">barra amarilla</span> vienen del Minuto de Oro. El vendedor puede editar cantidades, agregar productos del catálogo o eliminar (con motivo obligatorio).
+      </div>
+    </div>
+
+    <div class="cart-shell">
+
+      <div class="cart-main">
+        <div class="cart-head">
+          <div>
+            <h2>CARRITO · PEDIDO #7746036289</h2>
+            <div style="font-family:'Barlow Condensed',sans-serif;color:var(--w-gray-55);font-size:12px;letter-spacing:1px;margin-top:4px;text-transform:uppercase">MECÁNICA INTEGRAL CAÑUELAS · VISITA INICIADA 10:14</div>
+          </div>
+          <div class="cart-head-actions">
+            <button class="btn btn-ghost btn-sm" onclick="goTo('minuto')">← VOLVER A MINUTO DE ORO</button>
+            <button class="btn btn-dark btn-sm">+ AGREGAR DEL CATÁLOGO</button>
+          </div>
+        </div>
+        <div id="cart-items"></div>
+      </div>
+
+      <!-- SIDEBAR -->
+      <div class="cart-side">
+
+        <div class="side-block">
+          <div class="side-block-head">INDICADORES DE LA VISITA</div>
+          <div class="side-block-body">
+            <div class="indicators">
+              <div class="indicator" id="ind-lineas">
+                <div class="indicator-dot"></div>
+                <div class="indicator-label">LÍNEAS<strong>Cantidad de productos</strong></div>
+                <div class="indicator-value" id="ind-lineas-val">0</div>
+              </div>
+              <div class="indicator" id="ind-dinero">
+                <div class="indicator-dot"></div>
+                <div class="indicator-label">DINERO NUEVO<strong>Primera vez que compra</strong></div>
+                <div class="indicator-value" id="ind-dinero-val">0</div>
+              </div>
+              <div class="indicator" id="ind-magni">
+                <div class="indicator-dot"></div>
+                <div class="indicator-label">MAGNÍFICOS<strong>Productos estratégicos</strong></div>
+                <div class="indicator-value" id="ind-magni-val">0</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="side-block">
+          <div class="side-block-head">TOTALES</div>
+          <div class="side-block-body">
+            <div class="totals">
+              <div class="totals-row"><span>Subtotal sin IVA</span><span id="cart-subtotal">$ 0</span></div>
+              <div class="totals-row"><span>IVA 21%</span><span id="cart-iva">$ 0</span></div>
+              <div class="totals-row"><span>Ítems diferentes</span><span id="cart-items-count">0</span></div>
+              <div class="totals-row grand"><span>TOTAL</span><span id="cart-total">$ 0</span></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="side-block">
+          <div class="side-block-head">ACCIONES DE CIERRE</div>
+          <div class="side-block-body" style="display:flex;flex-direction:column;gap:8px">
+            <button class="btn btn-primary" onclick="confirmarVenta()">CARGAR PEDIDO</button>
+            <button class="btn btn-dark">ENVIAR COTIZACIÓN (PDF)</button>
+            <button class="btn btn-ghost btn-sm">VER COTIZACIONES ANTERIORES</button>
+            <div style="border-top:1px solid var(--w-border);margin-top:6px;padding-top:10px;display:grid;grid-template-columns:1fr 1fr;gap:6px">
+              <button class="btn btn-ghost btn-sm" onclick="cerrarSinVenta('no-atendio')">NO ME ATENDIÓ</button>
+              <button class="btn btn-ghost btn-sm" onclick="cerrarSinVenta('cerrado')">CERRADO</button>
+              <button class="btn btn-ghost btn-sm">OTRO</button>
+              <button class="btn btn-ghost btn-sm">CARGAR HORARIOS</button>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+
+  </section>
+
+  <!-- SCREEN 4: SUCCESS -->
+  <section class="screen" id="success">
+    <div class="success-container">
+      <div class="success-icon">✓</div>
+      <h1>VISITA CERRADA</h1>
+      <p>Pedido cargado correctamente. La visita quedó registrada y el Minuto de Oro fue aplicado con éxito.</p>
+      <div class="success-summary">
+        <div class="success-stat">
+          <div class="v" id="sum-lineas">0</div>
+          <div class="l">Líneas en pedido</div>
+        </div>
+        <div class="success-stat">
+          <div class="v" id="sum-dinero">0</div>
+          <div class="l">Dinero nuevo</div>
+        </div>
+        <div class="success-stat">
+          <div class="v" id="sum-total">$ 0</div>
+          <div class="l">Total venta</div>
+        </div>
+      </div>
+      <p style="color:var(--w-gray-70);font-size:13px;max-width:420px;margin:0 auto"><strong>Próxima visita:</strong> si el cliente compró el 100% de los productos del Minuto de Oro, se arranca desde cero. Si compró parcial o no compró, los productos quedan como borrador para retomar.</p>
+      <div style="margin-top:24px;display:flex;gap:10px;justify-content:center">
+        <button class="btn btn-ghost" onclick="resetDemo()">↻ REINICIAR DEMO</button>
+        <button class="btn btn-primary" onclick="goTo('dashboard')">NUEVA VISITA</button>
+      </div>
+    </div>
+  </section>
+
+</div>
+
+<!-- FOOTER -->
+<div class="foot">
+  MINUTO DE ORO · DEMO · WÜRTH ARGENTINA · <strong>DESARROLLO INTERNO</strong>
+</div>
+
+<!-- MODAL MOTIVO -->
+<div class="modal-backdrop" id="motivoModal">
+  <div class="modal">
+    <div class="modal-head">
+      <h3>MOTIVO DE ELIMINACIÓN</h3>
+      <p>Este producto proviene del Minuto de Oro. Indicá por qué el cliente no lo compra:</p>
+    </div>
+    <div class="modal-body">
+      <div class="motivos" id="motivos-list">
+        <button class="motivo-btn" data-motivo="consume_otra_marca">Consume otra marca</button>
+        <button class="motivo-btn" data-motivo="precio">Precio</button>
+        <button class="motivo-btn" data-motivo="sin_presupuesto">Sin presupuesto</button>
+        <button class="motivo-btn" data-motivo="ya_tiene">Ya tiene</button>
+        <button class="motivo-btn" data-motivo="otro" style="grid-column:1 / -1">Otro (especificar)</button>
+      </div>
+      <div class="motivo-otro-area" id="motivoOtroArea" style="display:none">
+        <textarea id="motivoOtroText" placeholder="Especificá el motivo..."></textarea>
+      </div>
+    </div>
+    <div class="modal-foot">
+      <button class="btn btn-ghost btn-sm" onclick="cerrarModal()">CANCELAR</button>
+      <button class="btn btn-primary btn-sm" id="btnConfirmMotivo" onclick="confirmarMotivo()" disabled>CONFIRMAR ELIMINACIÓN</button>
+    </div>
+  </div>
+</div>
+
+<div class="toast-host" id="toastHost"></div>
+
+<script>
+// ============================================================
+// DATA
+// ============================================================
+
+const PRODUCTS = {
+  reposicion: [
+    {code:'90890200', name:'ROST OFF MECHANIC 300ML', family:'Desoxidantes', price:16298, img:'https://cdn.wurth.com.ar/img/productos/1262844-ch-rost-off-aflojador.jpg', months:[6,0,12,0,8,3], media:29, sugestao:32, magnifico:true},
+    {code:'0893180200', name:'ADITIVO DIESEL COMMON RAIL 300ML', family:'Aditivos', price:37871, img:'https://cdn.wurth.com.ar/img/productos/10366-ch-aditivo-diesel-common-rail1.jpg', months:[2,0,3,0,2,1], media:8, sugestao:10, magnifico:true},
+    {code:'90893900001', name:'CREMA LIMPIA MANOS N-PLUS 4L', family:'Limpieza', price:130648, img:'https://cdn.wurth.com.ar/img/productos/351459-ch-crema-limpia-manos-n-plus.jpg', months:[1,0,1,0,0,1], media:3, sugestao:3},
+    {code:'0893090', name:'WÜRTH BONDER CIANOACRILATO', family:'Adhesivos', price:8970, img:'https://cdn.wurth.com.ar/img/productos/1262759-ch-wurth-bonder.jpg', months:[4,0,2,0,6,0], media:12, sugestao:14, magnifico:true},
+    {code:'90892210', name:'SILICONA NEUTRA 280ML NEGRA', family:'Selladores', price:4900, img:'https://cdn.wurth.com.ar/img/productos/1263617-ch-silicona-neutra.jpg', months:[8,0,6,0,4,2], media:20, sugestao:22},
+  ],
+  dinero: [
+    {code:'90890324085', name:'SILICONA ALTA TEMPERATURA PRO 85G', family:'Selladores', price:17392, priceOld:17392, pricePromo:9678, img:'https://cdn.wurth.com.ar/img/productos/48308-ch-silicona-alta-temperatura-pro-85g.jpg', promo:true, magnifico:true},
+    {code:'80893100300', name:'CARBO OFF LIMPIA CUERPO MARIPOSA TBI', family:'Químicos', price:14864, img:'https://cdn.wurth.com.ar/img/productos/795-ch-carbo-off-limp-cuerpo-mariposa-tbi.jpg', imprescindible:true},
+    {code:'90893106', name:'GRASA LÍQUIDA HHS 2000 500ML', family:'Lubricantes', price:22450, img:null, magnifico:true},
+    {code:'90893651004', name:'LIMPIA CONTACTOS ELECTRÓNICOS 300ML', family:'Químicos', price:18200, img:null, magnifico:true},
+    {code:'90890108716', name:'LIMPIA FRENOS PREMIUM 500ML', family:'Químicos para Frenos', price:9450, img:null, magnifico:true},
+    {code:'90893114114', name:'ZINC EN AEROSOL 400ML', family:'Pinturas', price:12800, img:null, imprescindible:true},
+    {code:'95861002150', name:'ADITIVO LIMPIA INYECTORES NAFTA 150ML', family:'Aditivos', price:14200, img:null, imprescindible:true},
+  ],
+  lanza: [
+    {code:'90890026270', name:'ADHESIVO SELLADOR PARABRISAS PLUS 600', family:'Adhesivos', price:30886, priceOld:30886, pricePromo:12705, img:'https://cdn.wurth.com.ar/img/productos/1136809-ch-adh-sellad-parabrisas-plus-600-ml1.jpg', promo:true},
+    {code:'0899408109', name:'GUANTE LÁTEX CORRUG TAM 9 · PAR', family:'Seguridad', price:3500, img:null, isNew:true},
+    {code:'90892560104', name:'SILICONA ACETOXI 300ML GRIS', family:'Selladores', price:5200, img:null, promo:true},
+    {code:'90664115010', name:'DISCO DE CORTE 115X1 INOX', family:'Abrasivos', price:1680, img:null, isNew:true},
+    {code:'90892327001', name:'ADHESIVO PU 600ML NEGRO', family:'Adhesivos', price:26400, img:null, isNew:true},
+    {code:'0713012370', name:'ADAPTADOR TORQUE Y ÁNGULO 1/2 E 3/8', family:'Herramientas', price:42100, img:null, isNew:true},
+  ]
+};
+
+const selections = { reposicion:new Set(), dinero:new Set(), lanza:new Set() };
+const MINS = { reposicion:4, dinero:3, lanza:3 };
+const MONTH_HEADERS = ['ENE·26','DIC·25','NOV·25','OCT·25','SEP·25','AGO·25'];
+
+let cart = [];
+let motivoPending = null;
+
+// ============================================================
+// RENDERING
+// ============================================================
+
+function formatPrice(n){
+  if(!n) return '$ 0';
+  return '$ ' + Math.round(n).toLocaleString('es-AR');
+}
+
+function imgFallback(family){
+  const initials = family.split(/\s+/).slice(0,2).map(w=>w[0]).join('').toUpperCase();
+  return `<div class="product-img placeholder"><div class="ico">◩</div><div>${initials}</div></div>`;
+}
+
+function productImg(p){
+  if(p.img) return `<div class="product-img"><img src="${p.img}" alt="${p.name}" onerror="this.parentNode.outerHTML='${imgFallback(p.family).replace(/'/g,'&quot;')}'"></div>`;
+  return imgFallback(p.family);
+}
+
+function repImg(p){
+  if(p.img) return `<div class="rep-img"><img src="${p.img}" alt=""></div>`;
+  return `<div class="rep-img" style="font-family:'Barlow Condensed',sans-serif;font-size:9px;color:var(--w-gray-55);">◩</div>`;
+}
+
+// Render Reposición (table format)
+function renderReposicion(){
+  const list = document.getElementById('list-reposicion');
+  const head = `<div class="reposicion-head">
+    <div></div>
+    <div>PRODUCTO</div>
+    ${MONTH_HEADERS.map(m=>`<div class="num">${m}</div>`).join('')}
+    <div class="num">MEDIA<br>12M</div>
+    <div class="num">SUGES-<br>TÃO</div>
+    <div class="num">SEL</div>
+  </div>`;
+  const rows = PRODUCTS.reposicion.map((p,i)=>{
+    const isSel = selections.reposicion.has(p.code);
+    const cells = p.months.map(m=>`<div class="rep-month ${m>0?'has-data':''}">${m>0?m:'—'}</div>`).join('');
+    return `<div class="reposicion-row ${isSel?'selected':''}" onclick="toggleSelection('reposicion','${p.code}')">
+      ${repImg(p)}
+      <div class="rep-name"><strong>${p.name}</strong><span class="product-code">CÓD ${p.code} · ${p.family}</span></div>
+      ${cells}
+      <div class="rep-media">${p.media}</div>
+      <div class="rep-sugestao">${p.sugestao}</div>
+      <div style="text-align:center"><button class="product-toggle" style="width:28px;height:28px;font-size:16px" onclick="event.stopPropagation();toggleSelection('reposicion','${p.code}')">${isSel?'✓':'+'}</button></div>
+    </div>`;
+  }).join('');
+  list.innerHTML = head + rows;
+}
+
+function renderList(category, targetId){
+  const list = document.getElementById(targetId);
+  list.innerHTML = PRODUCTS[category].map(p=>{
+    const isSel = selections[category].has(p.code);
+    const tags = [];
+    if(p.promo) tags.push('<span class="mini-tag mini-tag-promo">PROMO</span>');
+    if(p.isNew) tags.push('<span class="mini-tag mini-tag-new">LANZAMIENTO</span>');
+    if(p.magnifico) tags.push('<span class="mini-tag mini-tag-magnifico">MAGNÍFICO</span>');
+    if(!p.magnifico && !p.isNew && !p.promo) tags.push(`<span class="mini-tag mini-tag-familia">${p.family}</span>`);
+    const priceBlock = p.priceOld && p.pricePromo
+      ? `<div class="price-old">${formatPrice(p.priceOld)}</div><div class="price-main" style="color:var(--w-red)">${formatPrice(p.pricePromo)}</div>`
+      : `<div class="price-main">${formatPrice(p.price)}</div>`;
+    return `<div class="product ${isSel?'selected':''}" onclick="toggleSelection('${category}','${p.code}')">
+      ${productImg(p)}
+      <div class="product-info">
+        <h4>${p.name}</h4>
+        <div class="product-code">CÓD ${p.code}</div>
+        <div class="product-tags">${tags.join('')}</div>
+      </div>
+      <div class="product-price">${priceBlock}<div class="price-sub">+ IVA</div></div>
+      <button class="product-toggle" onclick="event.stopPropagation();toggleSelection('${category}','${p.code}')">${isSel?'✓':'+'}</button>
+    </div>`;
+  }).join('');
+}
+
+function toggleSelection(cat, code){
+  if(selections[cat].has(code)) selections[cat].delete(code);
+  else selections[cat].add(code);
+  updateCounts();
+  if(cat === 'reposicion') renderReposicion();
+  else renderList(cat, cat==='dinero'?'list-dinero':'list-lanza');
+}
+
+function updateCounts(){
+  Object.keys(selections).forEach(cat=>{
+    const c = selections[cat].size;
+    document.getElementById('count-'+cat).textContent = c;
+    document.getElementById('chip-'+cat).classList.toggle('complete', c >= MINS[cat]);
+  });
+  const total = selections.reposicion.size + selections.dinero.size + selections.lanza.size;
+  document.getElementById('total-selected').textContent = total;
+  const mins = ['reposicion','dinero','lanza'].filter(c=>selections[c].size >= MINS[c]).length;
+  const minEl = document.getElementById('min-cumplido');
+  minEl.textContent = mins + ' de 3';
+  minEl.className = 'action-metric-value ' + (mins===3?'ok':'pending');
+
+  // Estimated subtotal
+  let est = 0;
+  ['reposicion','dinero','lanza'].forEach(cat=>{
+    PRODUCTS[cat].forEach(p=>{
+      if(selections[cat].has(p.code)){
+        const price = p.pricePromo || p.price;
+        const qty = cat==='reposicion' ? (p.sugestao||1) : 1;
+        est += price * qty;
+      }
+    });
+  });
+  document.getElementById('estimated-total').textContent = formatPrice(est);
+
+  document.getElementById('btn-start-visit').disabled = mins < 3;
+}
+
+// ============================================================
+// START VISIT / CART
+// ============================================================
+
+function startVisit(){
+  cart = [];
+  ['reposicion','dinero','lanza'].forEach(cat=>{
+    PRODUCTS[cat].forEach(p=>{
+      if(selections[cat].has(p.code)){
+        cart.push({
+          ...p,
+          qty: cat==='reposicion' ? (p.sugestao||1) : 1,
+          source: cat,
+          fromMinuto: true,
+          priceFinal: p.pricePromo || p.price,
+        });
+      }
+    });
+  });
+  renderCart();
+  goTo('cart');
+  toast('Visita iniciada · '+cart.length+' productos en el precarrito','success');
+}
+
+function renderCart(){
+  const host = document.getElementById('cart-items');
+  if(cart.length===0){
+    host.innerHTML = '<div style="padding:60px 20px;text-align:center;color:var(--w-gray-55)">Carrito vacío. Volvé al Minuto de Oro para agregar productos.</div>';
+  } else {
+    host.innerHTML = cart.map((item,i)=>{
+      const total = item.qty * item.priceFinal;
+      return `<div class="cart-item ${item.fromMinuto?'minuto-oro':''}">
+        <div class="mo-bar"></div>
+        ${item.img ? `<div class="cart-item-img"><img src="${item.img}" alt=""></div>` : `<div class="cart-item-img">◩</div>`}
+        <div class="cart-item-info">
+          <h4>${item.name}</h4>
+          <div class="product-code">CÓD ${item.code} · ${item.family}</div>
+          <div class="product-tags">
+            ${item.fromMinuto?'<span class="mini-tag" style="background:var(--w-yellow);color:var(--w-black)">MINUTO DE ORO</span>':''}
+            ${item.promo?'<span class="mini-tag mini-tag-promo">PROMO</span>':''}
+            ${item.magnifico?'<span class="mini-tag mini-tag-magnifico">MAGNÍFICO</span>':''}
+            ${item.isNew?'<span class="mini-tag mini-tag-new">LANZAMIENTO</span>':''}
+          </div>
+        </div>
+        <div class="qty-control">
+          <button class="qty-btn" onclick="updateQty(${i},-1)">−</button>
+          <input class="qty-input" value="${item.qty}" onchange="setQty(${i},this.value)">
+          <button class="qty-btn" onclick="updateQty(${i},1)">+</button>
+        </div>
+        <div class="cart-item-total">${formatPrice(total)}</div>
+        <button class="remove-btn" onclick="removeItem(${i})" title="Eliminar">✕</button>
+      </div>`;
+    }).join('');
+  }
+  updateCartTotals();
+}
+
+function updateQty(idx, delta){
+  cart[idx].qty = Math.max(1, cart[idx].qty + delta);
+  renderCart();
+}
+function setQty(idx, val){
+  const n = parseInt(val)||1;
+  cart[idx].qty = Math.max(1,n);
+  renderCart();
+}
+
+function removeItem(idx){
+  const item = cart[idx];
+  if(item.fromMinuto){
+    motivoPending = idx;
+    openModal();
+  } else {
+    cart.splice(idx,1);
+    renderCart();
+    toast('Producto eliminado');
+  }
+}
+
+function updateCartTotals(){
+  const subtotal = cart.reduce((s,i)=>s + i.priceFinal * i.qty, 0);
+  const iva = subtotal * 0.21;
+  document.getElementById('cart-subtotal').textContent = formatPrice(subtotal);
+  document.getElementById('cart-iva').textContent = formatPrice(iva);
+  document.getElementById('cart-total').textContent = formatPrice(subtotal + iva);
+  document.getElementById('cart-items-count').textContent = cart.length;
+
+  // Indicators
+  const lineas = cart.length;
+  const dineroN = cart.filter(i=>i.fromMinuto && (i.magnifico||i.imprescindible)).length;
+  const magni = cart.filter(i=>i.magnifico||i.imprescindible).length;
+
+  const setInd = (id,val,thresholdOk,thresholdWarn)=>{
+    const el = document.getElementById(id);
+    document.getElementById(id+'-val').textContent = val;
+    el.className = 'indicator';
+    if(val >= thresholdOk) el.classList.add('');
+    else if(val >= thresholdWarn) el.classList.add('warning');
+    else el.classList.add('danger');
+  };
+  setInd('ind-lineas', lineas, 8, 4);
+  setInd('ind-dinero', dineroN, 3, 1);
+  setInd('ind-magni', magni, 3, 1);
+}
+
+// ============================================================
+// MODAL MOTIVO
+// ============================================================
+
+function openModal(){
+  document.getElementById('motivoModal').classList.add('open');
+  document.querySelectorAll('.motivo-btn').forEach(b=>b.classList.remove('selected'));
+  document.getElementById('motivoOtroArea').style.display='none';
+  document.getElementById('motivoOtroText').value='';
+  document.getElementById('btnConfirmMotivo').disabled=true;
+}
+function cerrarModal(){
+  document.getElementById('motivoModal').classList.remove('open');
+  motivoPending=null;
+}
+
+document.querySelectorAll('.motivo-btn').forEach(btn=>{
+  btn.addEventListener('click', ()=>{
+    document.querySelectorAll('.motivo-btn').forEach(b=>b.classList.remove('selected'));
+    btn.classList.add('selected');
+    const otro = btn.dataset.motivo === 'otro';
+    document.getElementById('motivoOtroArea').style.display = otro ? 'block' : 'none';
+    document.getElementById('btnConfirmMotivo').disabled = otro ? !document.getElementById('motivoOtroText').value.trim() : false;
+  });
+});
+
+document.getElementById('motivoOtroText').addEventListener('input', (e)=>{
+  document.getElementById('btnConfirmMotivo').disabled = !e.target.value.trim();
+});
+
+function confirmarMotivo(){
+  const selected = document.querySelector('.motivo-btn.selected');
+  if(!selected) return;
+  const motivo = selected.dataset.motivo;
+  if(motivoPending !== null){
+    cart.splice(motivoPending,1);
+    renderCart();
+    toast('Producto eliminado · Motivo registrado: ' + selected.textContent, 'success');
+  }
+  cerrarModal();
+}
+
+// ============================================================
+// CIERRE
+// ============================================================
+
+function confirmarVenta(){
+  const subtotal = cart.reduce((s,i)=>s + i.priceFinal * i.qty, 0);
+  const iva = subtotal * 0.21;
+  const dineroN = cart.filter(i=>i.fromMinuto && (i.magnifico||i.imprescindible)).length;
+  document.getElementById('sum-lineas').textContent = cart.length;
+  document.getElementById('sum-dinero').textContent = dineroN;
+  document.getElementById('sum-total').textContent = formatPrice(subtotal+iva);
+  goTo('success');
+  toast('Pedido cargado · Visita cerrada automáticamente','success');
+}
+
+function cerrarSinVenta(tipo){
+  const msg = tipo==='no-atendio' ? 'Visita cerrada: cliente no me atendió. Borrador guardado automáticamente. Abriendo WhatsApp…' : 'Visita cerrada: cliente cerrado. Borrador guardado. Abriendo WhatsApp…';
+  toast(msg,'success');
+  setTimeout(()=>{
+    document.getElementById('sum-lineas').textContent = cart.length;
+    document.getElementById('sum-dinero').textContent = 0;
+    document.getElementById('sum-total').textContent = '$ 0';
+    goTo('success');
+  }, 800);
+}
+
+function resetDemo(){
+  Object.keys(selections).forEach(k=>selections[k].clear());
+  cart = [];
+  updateCounts();
+  renderReposicion();
+  renderList('dinero','list-dinero');
+  renderList('lanza','list-lanza');
+  renderCart();
+  goTo('dashboard');
+  toast('Demo reiniciada');
+}
+
+// ============================================================
+// NAVIGATION & TOAST
+// ============================================================
+
+function goTo(screenId){
+  document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
+  document.getElementById(screenId).classList.add('active');
+  document.querySelectorAll('.demo-bar .step').forEach(s=>{
+    s.classList.toggle('active', s.dataset.screen===screenId);
+  });
+  window.scrollTo({top:0, behavior:'smooth'});
+}
+
+function toast(msg, type=''){
+  const t = document.createElement('div');
+  t.className = 'toast ' + type;
+  t.textContent = msg;
+  document.getElementById('toastHost').appendChild(t);
+  setTimeout(()=>t.style.opacity='0',2200);
+  setTimeout(()=>t.remove(),2600);
+}
+
+// ============================================================
+// INIT
+// ============================================================
+
+renderReposicion();
+renderList('dinero','list-dinero');
+renderList('lanza','list-lanza');
+updateCounts();
+renderCart();
+
+// Close modal clicking backdrop
+document.getElementById('motivoModal').addEventListener('click', (e)=>{
+  if(e.target.id === 'motivoModal') cerrarModal();
+});
+</script>
+
+</body>
+</html>
